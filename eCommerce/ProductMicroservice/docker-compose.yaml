@@ -1,0 +1,40 @@
+version: "3.8"
+
+# Define the services (containers) that make up your application
+services:
+
+  # 🧱 MySQL Database Container
+  mysql-container:
+    image: mysql:latest                # Use the latest official MySQL image
+    container_name: mysql-container    # Optional: custom container name
+    environment:
+      MYSQL_ROOT_PASSWORD: admin       # Set MySQL root password
+    ports:
+      - "3306:3306"                    # Map host port 3306 to container port 3306
+    volumes:
+      - ./BaseDbScript:/docker-entrypoint-initdb.d  # Mount initialization SQL scripts
+    networks:
+      - product-msc-network            # Connect to the shared network
+    hostname: mysql-host-product-msc   # Set a recognizable hostname inside the network
+
+  # 🧩 Product Microservice Container (your .NET app)
+  product-microservice:
+    image: devnishant063/ecom-service:v2.0 # Your custom image from Docker Hub
+    container_name: product-microservice
+    depends_on:
+      - mysql-container                # Ensure MySQL starts before this service
+    environment:
+      MYSQL_HOST: mysql-host-product-msc   # Hostname of MySQL container
+      MYSQL_ROOT_PASSWORD: admin           # MySQL root password for connection
+    ports:
+      - "8080:8080"                    # Expose API port
+    networks:
+      - product-msc-network            # Connect to the same network
+
+# 🌐 Define a shared network for inter-container communication
+networks:
+  product-msc-network:
+    driver: bridge                     # Bridge driver is best for local dev setup
+
+
+    # docker compose -f <file.yaml> up , down , stop , start
