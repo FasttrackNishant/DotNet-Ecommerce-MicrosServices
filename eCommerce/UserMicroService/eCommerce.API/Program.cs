@@ -21,6 +21,10 @@ builder.Services.AddAutoMapper(typeof(ApplicationUserMappingProfile).Assembly);
 //FluentValidations
 builder.Services.AddFluentValidationAutoValidation();
 
+//Add Swagger services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 //Build the web application
 var app = builder.Build();
@@ -29,6 +33,9 @@ app.UseExceptionHandlingMiddleware();
 
 //Routing
 app.UseRouting();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //Auth
 app.UseAuthentication();

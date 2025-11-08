@@ -1,8 +1,12 @@
-﻿namespace eCommerce.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace eCommerce.Core.Entities;
 
 /// <summary>
 /// Define the ApplicationUser class which acts as entity model class to store user details in data store
 /// </summary>
+/// 
+[Table("users")]
 public class ApplicationUser
 {
   public Guid UserID { get; set; }
